@@ -9,6 +9,9 @@ def test_deploy_templates_creates_structure(tmp_project):
 
     expected = [
         tmp_project / ".napkin" / "config.toml",
+        tmp_project / ".napkin" / "mcp" / "_config.py",
+        tmp_project / ".napkin" / "mcp" / "build_kb.py",
+        tmp_project / ".napkin" / "mcp" / "server.py",
         tmp_project / "docs" / "README.md",
         tmp_project / "docs" / "业务单元" / "README.md",
         tmp_project / "docs" / "业务单元" / "_template.md",

@@ -14,6 +14,7 @@ console = Console()
 def run_tidy(
     project_dir: Path,
     dry_run: bool = False,
+    full_rebuild: bool = False,
     force: bool = False,
     auto_confirm: bool = False,
 ) -> int:
@@ -31,9 +32,9 @@ def run_tidy(
     config = load_config(project_dir)
 
     # Step 1: Check zvec availability
-    if not check_zvec_available():
-        console.print("[red]❌ zvec 未安装，无法同步知识库[/red]")
-        console.print("   请先安装: [yellow]pip install zvec[/yellow]")
+    if not check_zvec_available(project_dir):
+        console.print("[red]❌ zvec 未安装或 .napkin/mcp/build_kb.py 不存在[/red]")
+        console.print("   请先执行: [yellow]vibe-napkin init[/yellow] 来部署 MCP 服务")
         return 1
 
     # Step 2: MCP lock detection (unless --force)
@@ -72,7 +73,7 @@ def run_tidy(
 
     # Step 4: Sync to zvec
     console.print("\n[bold]🗑️  正在收拾桌子，同步知识库...[/bold]")
-    success = sync_to_zvec(project_dir, dry_run=dry_run)
+    success = sync_to_zvec(project_dir, dry_run=dry_run, full_rebuild=full_rebuild)
 
     if not success:
         console.print("[red]❌ tidy 失败，请检查 zvec 配置[/red]")

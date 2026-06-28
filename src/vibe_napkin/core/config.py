@@ -14,8 +14,11 @@ class NapkinConfig:
     Stored in .napkin/config.toml within the project directory.
     """
 
-    embedding_provider: str = "local"
+    embedding_provider: str = "aliyun"
     embedding_api_key: str = ""
+    embedding_model: str = "text-embedding-v4"
+    embedding_dim: int = 1024
+    embedding_base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     zvec_data_dir: str = ".napkin/vectors"
     mcp_enabled: bool = True
     mcp_port: int = 8899
@@ -24,9 +27,16 @@ class NapkinConfig:
     @classmethod
     def from_dict(cls, data: dict) -> "NapkinConfig":
         """Create config from a nested dict (from TOML parse)."""
+        emb = data.get("embedding", {})
         return cls(
-            embedding_provider=data.get("embedding", {}).get("provider", "local"),
-            embedding_api_key=data.get("embedding", {}).get("api_key", ""),
+            embedding_provider=emb.get("provider", "aliyun"),
+            embedding_api_key=emb.get("api_key", ""),
+            embedding_model=emb.get("model", "text-embedding-v4"),
+            embedding_dim=int(emb.get("dim", 1024)),
+            embedding_base_url=emb.get(
+                "base_url",
+                "https://dashscope.aliyuncs.com/compatible-mode/v1",
+            ),
             zvec_data_dir=data.get("zvec", {}).get("data_dir", ".napkin/vectors"),
             mcp_enabled=data.get("mcp", {}).get("enabled", True),
             mcp_port=data.get("mcp", {}).get("port", 8899),
@@ -35,10 +45,16 @@ class NapkinConfig:
 
     def to_dict(self) -> dict:
         """Serialize config to a nested dict for TOML dump."""
+        emb = {
+            "provider": self.embedding_provider,
+            "model": self.embedding_model,
+            "dim": self.embedding_dim,
+            "base_url": self.embedding_base_url,
+        }
+        if self.embedding_api_key:
+            emb["api_key"] = self.embedding_api_key
         result = {
-            "embedding": {
-                "provider": self.embedding_provider,
-            },
+            "embedding": emb,
             "zvec": {
                 "data_dir": self.zvec_data_dir,
             },
@@ -50,8 +66,6 @@ class NapkinConfig:
                 "name": self.project_name,
             },
         }
-        if self.embedding_api_key:
-            result["embedding"]["api_key"] = self.embedding_api_key
         return result
 
 

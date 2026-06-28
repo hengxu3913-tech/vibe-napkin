@@ -60,3 +60,16 @@ def deploy_templates(
                 content = item.read_text(encoding="utf-8")
                 rendered = render_template(content, variables)
                 dest_file.write_text(rendered, encoding="utf-8")
+
+    # Deploy mcp/ directory (.napkin/mcp/)
+    src_mcp = template_root / "mcp"
+    if src_mcp.exists():
+        dest_mcp = napkin_dir / "mcp"
+        for item in src_mcp.rglob("*"):
+            if item.is_file():
+                rel_path = item.relative_to(src_mcp)
+                dest_file = dest_mcp / rel_path
+                dest_file.parent.mkdir(parents=True, exist_ok=True)
+                content = item.read_text(encoding="utf-8")
+                # No variable substitution for mcp files (they use config.toml directly)
+                dest_file.write_text(content, encoding="utf-8")

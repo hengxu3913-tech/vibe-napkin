@@ -55,6 +55,9 @@ def tidy(
     dry_run: bool = typer.Option(
         False, "--dry-run", help="Preview only, no actual sync"
     ),
+    full: bool = typer.Option(
+        False, "--full", help="Full rebuild (clear and re-index all docs)"
+    ),
     force: bool = typer.Option(
         False, "--force", help="Skip MCP lock detection"
     ),
@@ -63,7 +66,13 @@ def tidy(
     ),
 ):
     """🗑️ Sync business units to vector knowledge base."""
-    exit_code = run_tidy(project_dir, dry_run=dry_run, force=force, auto_confirm=yes)
+    exit_code = run_tidy(
+        project_dir,
+        dry_run=dry_run,
+        full_rebuild=full,
+        force=force,
+        auto_confirm=yes,
+    )
     raise typer.Exit(code=exit_code)
 
 

@@ -1,6 +1,10 @@
 [embedding]
-provider = "local"
-# api_key = "sk-xxx"    # Uncomment if provider = "api"
+provider = "aliyun"
+# 可用选项：aliyun（阿里云DashScope）、local（本地BGE模型）、openai（OpenAI兼容接口）
+model = "text-embedding-v4"
+dim = 1024
+# api_key = "sk-xxx"                        # 填你的 API Key
+# base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 [zvec]
 data_dir = ".napkin/vectors"
