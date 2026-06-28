@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 from vibe_napkin.commands.init_cmd import run_init
+from vibe_napkin.commands.wipe_cmd import run_wipe
 
 app = typer.Typer(
     name="vibe-napkin",
@@ -38,7 +39,8 @@ def wipe(
     ),
 ):
     """🧻 Scan and sync business unit changes."""
-    typer.echo("🧻 wipe: Not yet implemented")
+    exit_code = run_wipe(project_dir, auto_confirm=yes)
+    raise typer.Exit(code=exit_code)
 
 
 @app.command()
