@@ -6,6 +6,7 @@ from typing import Optional
 
 from vibe_napkin.commands.init_cmd import run_init
 from vibe_napkin.commands.wipe_cmd import run_wipe
+from vibe_napkin.commands.tidy_cmd import run_tidy
 
 app = typer.Typer(
     name="vibe-napkin",
@@ -59,7 +60,8 @@ def tidy(
     ),
 ):
     """🗑️ Sync business units to vector knowledge base."""
-    typer.echo("🗑️ tidy: Not yet implemented")
+    exit_code = run_tidy(project_dir, dry_run=dry_run, force=force, auto_confirm=yes)
+    raise typer.Exit(code=exit_code)
 
 
 @app.command()
