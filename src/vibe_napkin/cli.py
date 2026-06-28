@@ -4,6 +4,8 @@ import typer
 from pathlib import Path
 from typing import Optional
 
+from vibe_napkin.commands.init_cmd import run_init
+
 app = typer.Typer(
     name="vibe-napkin",
     help="🧻 You mouth the code, we wipe the crumbs.",
@@ -21,7 +23,9 @@ def init(
     ),
 ):
     """⛺ Initialize vibe-napkin in a project (env + templates)."""
-    typer.echo("⛺ init: Not yet implemented")
+    name = project_name or (project_dir.name if project_dir.name != "." else "project")
+    exit_code = run_init(project_dir, project_name=name)
+    raise typer.Exit(code=exit_code)
 
 
 @app.command()
