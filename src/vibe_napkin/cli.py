@@ -7,6 +7,9 @@ from typing import Optional
 from vibe_napkin.commands.init_cmd import run_init
 from vibe_napkin.commands.wipe_cmd import run_wipe
 from vibe_napkin.commands.tidy_cmd import run_tidy
+from vibe_napkin.commands.save_cmd import run_save
+from vibe_napkin.commands.load_cmd import run_load
+from vibe_napkin.commands.list_cmd import run_list
 
 app = typer.Typer(
     name="vibe-napkin",
@@ -74,7 +77,8 @@ def save(
     ),
 ):
     """💾 Save current progress as a checkpoint."""
-    typer.echo("💾 save: Not yet implemented")
+    exit_code = run_save(project_dir, label)
+    raise typer.Exit(code=exit_code)
 
 
 @app.command()
@@ -83,11 +87,12 @@ def load(
         ".", "--dir", "-d", help="Project directory"
     ),
     checkpoint_id: str = typer.Argument(
-        ..., help="Checkpoint ID (date-serial-label or index number)"
+        ..., help="Checkpoint ID (date-serial-label)"
     ),
 ):
     """📂 Restore a checkpoint to continue progress."""
-    typer.echo("📂 load: Not yet implemented")
+    exit_code = run_load(project_dir, checkpoint_id)
+    raise typer.Exit(code=exit_code)
 
 
 @app.command()
@@ -97,4 +102,5 @@ def list(
     ),
 ):
     """📋 List all checkpoints."""
-    typer.echo("📋 list: Not yet implemented")
+    exit_code = run_list(project_dir)
+    raise typer.Exit(code=exit_code)
