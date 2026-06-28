@@ -1,0 +1,13 @@
+[embedding]
+provider = "local"
+# api_key = "sk-xxx"    # Uncomment if provider = "api"
+
+[zvec]
+data_dir = ".napkin/vectors"
+
+[mcp]
+enabled = true
+port = 8899
+
+[project]
+name = "{{ project_name }}"
