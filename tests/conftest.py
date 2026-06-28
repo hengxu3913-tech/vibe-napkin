@@ -4,7 +4,15 @@ import pytest
 import tempfile
 import shutil
 import subprocess
+import os
+import stat
 from pathlib import Path
+
+
+def _remove_readonly(func, path, _):
+    """Clear read-only bit and retry deletion (handles Windows git locks)."""
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
 
 
 @pytest.fixture
@@ -12,7 +20,7 @@ def tmp_project():
     """Create a temporary directory simulating a project root."""
     tmp_dir = tempfile.mkdtemp()
     yield Path(tmp_dir)
-    shutil.rmtree(tmp_dir)
+    shutil.rmtree(tmp_dir, onerror=_remove_readonly)
 
 
 @pytest.fixture
